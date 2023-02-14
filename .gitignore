@@ -1,0 +1,4 @@
+/node_modules/
+/packages/chrome/node_modules/
+/packages/chrome/dist/
+.idea
