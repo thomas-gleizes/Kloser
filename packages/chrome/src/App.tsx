@@ -1,46 +1,39 @@
-import React, { createContext, useContext, useEffect, useState } from "react"
-import HomeScreen from "./screens/Home"
-
-const AppContext = createContext<{ url: URL }>(null)
-
-export const useAppContext = () => {
-  return useContext(AppContext)
-}
-const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [url, setUrl] = useState<URL>()
-
-  useEffect(() => {
-    chrome.runtime.onMessage.addListener((message: Message) => {
-      switch (message.type) {
-        case "RESP_URL":
-          setUrl(new URL(message.data.url))
-      }
-    })
-  }, [])
-
-  useEffect(() => {
-    chrome.runtime.sendMessage({ type: "ASK_URL" }, (message) =>
-      console.log("message", message)
-    )
-
-    chrome.storage.local
-      .set({ token: "private_token" })
-      .then((data) => console.log("token set", data))
-  }, [])
-
-  console.log("Url", url)
-
-  return <AppContext.Provider value={{ url }}>{children}</AppContext.Provider>
-}
+import classnames from "classnames"
+import React, { useState } from "react"
+import AppContextProvider from "./contexts/app.context"
+import { SCREEN } from "./utils/constans"
 
 const App = () => {
+  const [screen, setScreen] = useState<ScreenR>(SCREEN.main)
+
   return (
     <AppContextProvider>
-      <section className="w-[500px] h-[150px] bg-white">
-        <HomeScreen />
-      </section>
+      <header className="bg-gray-300 shadow rounded-b-lg shadow">
+        <div>
+          <h1 className="text-center text-lg">{screen.label}</h1>
+        </div>
+      </header>
+      <main className="w-[220px] max-h-[500px] bg-white py-4 px-3">
+        <screen.component />
+      </main>
+      <footer className="bg-gradient-to-bl from-blue-700 to-gray-900 text-white py-2 rounded-t-md">
+        <nav className="flex justify-evenly">
+          {Object.values(SCREEN).map((s) => (
+            <div
+              className="group select-none cursor-pointer"
+              onClick={() => setScreen(s)}
+            >
+              <a className="text-white text-[13px]">{s.label}</a>
+              <div
+                className={classnames(
+                  "border border-white border-b w-full transition transform group-hover:scale-x-100",
+                  s.label === screen.label ? "scale-x-100" : "scale-x-0"
+                )}
+              />
+            </div>
+          ))}
+        </nav>
+      </footer>
     </AppContextProvider>
   )
 }

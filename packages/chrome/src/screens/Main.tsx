@@ -1,6 +1,6 @@
-import { useAppContext } from "../App"
+import { useAppContext } from "../contexts/app.context"
 
-const HomeScreen = () => {
+const HomeScreen: React.FC = () => {
   const { url } = useAppContext()
 
   const handleClick = async () => {

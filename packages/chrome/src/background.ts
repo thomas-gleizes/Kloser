@@ -1,19 +1,10 @@
 import storageService from "./services/storges"
 
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener(async () => {
   console.log("========= installed =========")
 
-  void storageService.set<BannedUrl[]>("banned_urls", [
-    {
-      type: "page",
-      url: "https://github.com/thomas-gleizes/Page-closer/issues",
-    },
-    {
-      type: "site",
-      url: "https://box-stockage-ales.fr",
-    },
-  ])
-  void storageService.set<string>("auth_token", null)
+  void storageService.init<string>("auth_token", null)
+  void storageService.init<BannedUrl[]>("banned_urls", [])
 })
 
 chrome.runtime.onStartup.addListener(() => {
