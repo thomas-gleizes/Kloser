@@ -1,11 +1,22 @@
-export const getItem = async <T>(key: string): Promise<T> => {
-  try {
-    const storage = (await chrome.storage.local.get(key)) as T
+class StorageService {
+  constructor() {}
 
-    console.log("Storage", storage)
+  async get<T = any>(key: string): Promise<T> {
+    return chrome.storage.sync.get(key).then((item) => item[key])
+  }
 
-    return storage
-  } catch (err) {
-    return null
+  async append<T = any>(key: string, item: T): Promise<void> {
+    const oldItem = await this.get<T | Array<T>>(key)
+
+    if (Array.isArray(oldItem))
+      return chrome.storage.sync.set({ [key]: [...oldItem, item] })
+
+    return chrome.storage.sync.set({ [key]: { ...oldItem, item } })
+  }
+
+  async set<T>(key: string, item: T): Promise<void> {
+    return chrome.storage.sync.set({ [key]: item })
   }
 }
+
+export default new StorageService()

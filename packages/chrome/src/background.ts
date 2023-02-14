@@ -1,5 +1,23 @@
+import storageService from "./services/storges"
+
 chrome.runtime.onInstalled.addListener(() => {
-  void chrome.storage.sync.set({ banned_urls: [], token: null })
+  console.log("========= installed =========")
+
+  void storageService.set<BannedUrl[]>("banned_urls", [
+    {
+      type: "page",
+      url: "https://github.com/thomas-gleizes/Page-closer/issues",
+    },
+    {
+      type: "site",
+      url: "https://box-stockage-ales.fr",
+    },
+  ])
+  void storageService.set<string>("auth_token", null)
+})
+
+chrome.runtime.onStartup.addListener(() => {
+  console.log("========= startup =========")
 })
 
 chrome.contextMenus.create({
@@ -8,28 +26,56 @@ chrome.contextMenus.create({
   title: "Bloquer cette page",
 })
 
-chrome.contextMenus.onClicked.addListener(async (event, tab) => {
-  switch (event.menuItemId) {
-    case "block_page": {
-      const { banned_urls: urls } = await chrome.storage.sync.get("banned_urls")
+chrome.contextMenus.create({
+  id: "block_site",
+  contexts: ["all"],
+  title: "Bloquer ce site",
+})
 
-      await chrome.storage.sync.set({
-        banned_urls: [...urls, new URL(event.pageUrl).hostname],
+chrome.contextMenus.onClicked.addListener(async (event, tab) => {
+  const currentUrl = new URL(event.pageUrl)
+
+  switch (event.menuItemId) {
+    case "block_page":
+      await storageService.append<BannedUrl>("banned_urls", {
+        type: "page",
+        url: "https://" + currentUrl.host + currentUrl.pathname,
       })
 
       await chrome.tabs.remove(tab.id)
       break
-    }
+
+    case "block_site":
+      await storageService.append<BannedUrl>("banned_urls", {
+        type: "site",
+        url: "https://" + currentUrl.host,
+      })
+
+      await chrome.tabs.remove(tab.id)
+      break
   }
 })
-chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
   if (changeInfo.url) {
     const currentUrl = new URL(changeInfo.url)
-    const { banned_urls: urls } = await chrome.storage.sync.get("banned_urls")
+    const bannedUrls = await storageService.get<BannedUrl[]>("banned_urls")
 
-    if (urls.includes(currentUrl.hostname)) {
-      console.log("CLOSE :", currentUrl.hostname)
-      chrome.tabs.remove(tabId)
+    console.log("CurrentUrl, bannedUrls", changeInfo.url, bannedUrls)
+
+    for (const bannedUrl of bannedUrls) {
+      const url = new URL(bannedUrl.url)
+
+      if (
+        bannedUrl.type === "page" &&
+        currentUrl.host === url.host &&
+        currentUrl.pathname === url.pathname
+      ) {
+        console.log("CLOSE :", changeInfo.url)
+        void chrome.tabs.remove(tabId)
+      } else if (bannedUrl.type === "site" && currentUrl.host === url.host) {
+        console.log("CLOSE :", changeInfo.url)
+        void chrome.tabs.remove(tabId)
+      }
     }
   }
 })
