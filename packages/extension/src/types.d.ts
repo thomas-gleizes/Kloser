@@ -3,9 +3,11 @@ declare type Message = {
   data: any
 }
 
-declare type BannedUrl = {
+declare type TypeURL = "page" | "site"
+
+declare type BannedURL = {
   url: string
-  type: "site" | "page"
+  type: TypeURL
 }
 
 declare type ScreenR = {

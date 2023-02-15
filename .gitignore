@@ -1,4 +1,6 @@
 /node_modules/
-/packages/chrome/node_modules/
-/packages/chrome/dist/
+/packages/extension/node_modules/
+/packages/extension/dist/
 .idea
+/packages/extension/dist.pem
+/packages/extension/dist.crx

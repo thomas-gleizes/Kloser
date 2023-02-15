@@ -1,5 +1,5 @@
 {
-  "name": "chrome",
+  "name": "@PageCloser/extension",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -13,6 +13,8 @@
     "classnames": "^2.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.7.1",
+    "simplebar-react": "^3.2.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
