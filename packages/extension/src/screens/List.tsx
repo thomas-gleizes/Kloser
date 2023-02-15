@@ -16,7 +16,6 @@ const ListScreen: React.FC = () => {
     [bannedURLs]
   )
 
-
   return (
     <div className="flex flex-col space-y-3">
       <div>

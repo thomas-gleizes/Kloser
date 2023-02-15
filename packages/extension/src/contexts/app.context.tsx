@@ -3,8 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-
-  useState
+  useState,
 } from "react"
 
 import storage from "../services/storges"
@@ -23,8 +22,8 @@ export const useAppContext = () => {
 }
 
 const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
-                                                                       children
-                                                                     }) => {
+  children,
+}) => {
   const [activeURL, setActiveURL] = useState<URL>()
   const [bannedURLs, setBannedURLs] = useState<BannedURL[]>([])
 
@@ -93,13 +92,15 @@ const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
       )
 
       if (index >= 0) {
-        bannedURLs[index] = { type: "site", url: `https://${new URL(bannedURL.url).host}` }
+        bannedURLs[index] = {
+          type: "site",
+          url: `https://${new URL(bannedURL.url).host}`,
+        }
         await storage.set(STORAGE_KEY.URLS, [...bannedURLs])
         setBannedURLs([...bannedURLs])
       }
-
-
-    }, [bannedURLs]
+    },
+    [bannedURLs]
   )
 
   return (
@@ -109,7 +110,7 @@ const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
         bannedURLs,
         closeActiveTab,
         unbanURL,
-        banSite
+        banSite,
       }}
     >
       {children}

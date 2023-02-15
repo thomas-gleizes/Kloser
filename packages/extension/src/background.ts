@@ -15,13 +15,13 @@ chrome.runtime.onStartup.addListener(() => {
 chrome.contextMenus.create({
   id: CONTEXTS_MENU_ID.BLOCK_PAGE,
   contexts: ["all"],
-  title: "Bloquer cette page"
+  title: "Bloquer cette page",
 })
 
 chrome.contextMenus.create({
   id: CONTEXTS_MENU_ID.BLOCK_SITE,
   contexts: ["all"],
-  title: "Bloquer ce site"
+  title: "Bloquer ce site",
 })
 
 chrome.contextMenus.onClicked.addListener(async (event, tab) => {
@@ -32,7 +32,7 @@ chrome.contextMenus.onClicked.addListener(async (event, tab) => {
       case CONTEXTS_MENU_ID.BLOCK_PAGE:
         await storageService.append<BannedURL>(STORAGE_KEY.URLS, {
           type: "page",
-          url: "https://" + currentUrl.host + currentUrl.pathname
+          url: "https://" + currentUrl.host + currentUrl.pathname,
         })
 
         await chrome.tabs.remove(tab.id as number)
@@ -41,7 +41,7 @@ chrome.contextMenus.onClicked.addListener(async (event, tab) => {
       case CONTEXTS_MENU_ID.BLOCK_SITE:
         await storageService.append<BannedURL>(STORAGE_KEY.URLS, {
           type: "site",
-          url: "https://" + currentUrl.host
+          url: "https://" + currentUrl.host,
         })
 
         await chrome.tabs.remove(tab.id as number)
@@ -74,10 +74,9 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   const [activeTab] = await chrome.tabs.query({
     active: true,
-    lastFocusedWindow: true
+    lastFocusedWindow: true,
   })
   const currentUrl = new URL(activeTab.url as string)
-
 
   switch (request.type) {
     case MESSAGE_TYPE.ASK_URL:
@@ -87,7 +86,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 
       return void chrome.runtime.sendMessage({
         type: MESSAGE_TYPE.RESP_URL,
-        data: { url: activeTab.url }
+        data: { url: activeTab.url },
       })
 
     case MESSAGE_TYPE.CLOSE_TAB:
