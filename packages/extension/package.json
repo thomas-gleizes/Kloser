@@ -1,6 +1,6 @@
 {
-  "name": "extension",
-  "version": "0.0.1",
+  "name": "@kloser/extension",
+  "version": "1.0.0-beta",
   "description": "",
   "main": "index.js",
   "keywords": [],

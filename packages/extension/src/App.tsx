@@ -17,7 +17,7 @@ const App = () => {
               Page-closer
             </h1>
             <div className="text-xs opacity-60 text-opacity-70 mt-2">
-              v0.0.1
+              v1.0.0-beta
             </div>
           </div>
         </header>

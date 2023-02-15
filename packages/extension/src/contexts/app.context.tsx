@@ -4,7 +4,7 @@ import React, {
   useContext,
   useEffect,
 
-  useState,
+  useState
 } from "react"
 
 import storage from "../services/storges"
@@ -15,6 +15,7 @@ const AppContext = createContext<{
   bannedURLs: BannedURL[]
   closeActiveTab: () => void
   unbanURL: (bannedURL: BannedURL) => Promise<void>
+  banSite: (bannedURL: BannedURL) => Promise<void>
 }>(null as any)
 
 export const useAppContext = () => {
@@ -22,8 +23,8 @@ export const useAppContext = () => {
 }
 
 const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+                                                                       children
+                                                                     }) => {
   const [activeURL, setActiveURL] = useState<URL>()
   const [bannedURLs, setBannedURLs] = useState<BannedURL[]>([])
 
@@ -73,13 +74,32 @@ const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
           search.url === bannedURL.url && search.type === bannedURL.type
       )
 
-      if (index) {
+      if (index >= 0) {
         bannedURLs.splice(index, 1)
         await storage.set(STORAGE_KEY.URLS, bannedURLs)
         setBannedURLs(bannedURLs)
       }
     },
     [bannedURLs]
+  )
+
+  const banSite = useCallback(
+    async (bannedURL: BannedURL) => {
+      const bannedURLs = await storage.get<BannedURL[]>(STORAGE_KEY.URLS)
+
+      const index = bannedURLs.findIndex(
+        (search) =>
+          search.url === bannedURL.url && search.type === bannedURL.type
+      )
+
+      if (index >= 0) {
+        bannedURLs[index] = { type: "site", url: `https://${new URL(bannedURL.url).host}` }
+        await storage.set(STORAGE_KEY.URLS, [...bannedURLs])
+        setBannedURLs([...bannedURLs])
+      }
+
+
+    }, [bannedURLs]
   )
 
   return (
@@ -89,6 +109,7 @@ const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
         bannedURLs,
         closeActiveTab,
         unbanURL,
+        banSite
       }}
     >
       {children}

@@ -4,7 +4,7 @@ import { FaBan, FaCheck } from "react-icons/all"
 import { useAppContext } from "../contexts/app.context"
 
 const ListScreen: React.FC = () => {
-  const { bannedURLs, unbanURL } = useAppContext()
+  const { bannedURLs, unbanURL, banSite } = useAppContext()
 
   const pageBannedUrls = useMemo<BannedURL[]>(
     () => bannedURLs.filter((item) => item.type === "page"),
@@ -16,12 +16,11 @@ const ListScreen: React.FC = () => {
     [bannedURLs]
   )
 
-  const handleUnBannedPage = async () => {}
 
   return (
     <div className="flex flex-col space-y-3">
       <div>
-        <h3 className="text-lg text-center font-semibold">Site bloqué</h3>
+        <h3 className="text-lg text-center font-semibold mb-2">Site bloqué</h3>
         <div className="flex flex-col">
           {siteBannedURLs.length ? (
             siteBannedURLs.map((bannedUrl, index) => (
@@ -30,14 +29,14 @@ const ListScreen: React.FC = () => {
                 className="flex justify-between items-center px-2 border-b py-1 border-gray-200"
               >
                 <div className="max-w-[75%]">
-                  <p className="text-sm">{new URL(bannedUrl.url).host}</p>
+                  <p className="text-xs">{new URL(bannedUrl.url).host}</p>
                 </div>
                 <div>
                   <i
                     onClick={() => unbanURL(bannedUrl)}
-                    className="text-red-500 text-lg cursor-pointer"
+                    className="text-green-500 text-lg cursor-pointer"
                   >
-                    <FaBan />
+                    <FaCheck />
                   </i>
                 </div>
               </div>
@@ -75,7 +74,7 @@ const ListScreen: React.FC = () => {
                     <FaCheck />
                   </i>
                   <i
-                    onClick={() => unbanURL(bannedUrl)}
+                    onClick={() => banSite(bannedUrl)}
                     className="text-red-500 text-lg cursor-pointer"
                   >
                     <FaBan />
