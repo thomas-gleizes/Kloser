@@ -1,6 +1,6 @@
 {
-  "name": "@PageCloser/extension",
-  "version": "1.0.0",
+  "name": "extension",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "keywords": [],

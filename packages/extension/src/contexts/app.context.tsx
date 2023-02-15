@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+
   useState,
 } from "react"
 
@@ -63,19 +64,23 @@ const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
     []
   )
 
-  const unbanURL = async (bannedURL: BannedURL) => {
-    const bannedURLs = await storage.get<BannedURL[]>(STORAGE_KEY.URLS)
+  const unbanURL = useCallback(
+    async (bannedURL: BannedURL) => {
+      const bannedURLs = await storage.get<BannedURL[]>(STORAGE_KEY.URLS)
 
-    const index = bannedURLs.findIndex(
-      (search) => search.url === bannedURL.url && search.type === bannedURL.type
-    )
+      const index = bannedURLs.findIndex(
+        (search) =>
+          search.url === bannedURL.url && search.type === bannedURL.type
+      )
 
-    if (index) {
-      bannedURLs.splice(index, 1)
-      await storage.set(STORAGE_KEY.URLS, bannedURLs)
-      setBannedURLs(bannedURLs)
-    }
-  }
+      if (index) {
+        bannedURLs.splice(index, 1)
+        await storage.set(STORAGE_KEY.URLS, bannedURLs)
+        setBannedURLs(bannedURLs)
+      }
+    },
+    [bannedURLs]
+  )
 
   return (
     <AppContext.Provider

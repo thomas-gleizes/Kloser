@@ -1,6 +1,6 @@
 {
-  "name": "@PageCloser",
-  "version": "1.0.0",
+  "name": "page-closer",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.52.0",
+    "@typescript-eslint/parser": "^5.52.0",
     "eslint": "^8.34.0",
+    "eslint-config-prettier": "^8.6.0",
     "prettier": "^2.8.4"
   }
 }

@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { FaBan, FaCheck, FaStop, FaTimes } from "react-icons/all"
+import { FaBan, FaCheck } from "react-icons/all"
 
 import { useAppContext } from "../contexts/app.context"
 
