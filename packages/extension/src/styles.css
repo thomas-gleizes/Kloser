@@ -11,6 +11,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  outline: none;
+}
+
 #root {
   width: 320px;
 }

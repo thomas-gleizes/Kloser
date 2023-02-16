@@ -10,12 +10,10 @@ const App = () => {
 
   return (
     <AppContextProvider>
-      <div className="max-h-[600px] bg-white border-2 border-gray-900">
+      <div className="max-h-[850px] bg-white border-2 border-gray-900">
         <header className="px-3 py-2 rounded-b-lg bg-gray-200 shadow">
           <div className="flex justify-between">
-            <h1 className="text-md text-xl text-blue-700 font-bold">
-              Page-closer
-            </h1>
+            <h1 className="text-md text-xl text-blue-700 font-bold">Kloser</h1>
             <div className="text-xs opacity-60 text-opacity-70 mt-2">
               v1.0.0-beta
             </div>

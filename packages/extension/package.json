@@ -2,14 +2,17 @@
   "name": "@kloser/extension",
   "version": "1.0.0-beta",
   "description": "",
-  "main": "index.js",
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "chrome",
+    "extension"
+  ],
+  "author": "thomas-gleizes",
   "license": "ISC",
   "scripts": {
     "build": "vite build"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.11",
     "classnames": "^2.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

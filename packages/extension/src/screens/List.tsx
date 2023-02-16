@@ -2,6 +2,8 @@ import React, { useMemo } from "react"
 import { FaBan, FaCheck } from "react-icons/all"
 
 import { useAppContext } from "../contexts/app.context"
+import ToolTip from "../components/common/ToolTip"
+import Card from "../components/common/Card"
 
 const ListScreen: React.FC = () => {
   const { bannedURLs, unbanURL, banSite } = useAppContext()
@@ -18,8 +20,7 @@ const ListScreen: React.FC = () => {
 
   return (
     <div className="flex flex-col space-y-3">
-      <div>
-        <h3 className="text-lg text-center font-semibold mb-2">Site bloqué</h3>
+      <Card title="Site bloqué" defaultOpen={true}>
         <div className="flex flex-col">
           {siteBannedURLs.length ? (
             siteBannedURLs.map((bannedUrl, index) => (
@@ -28,7 +29,9 @@ const ListScreen: React.FC = () => {
                 className="flex justify-between items-center px-2 border-b py-1 border-gray-200"
               >
                 <div className="max-w-[75%]">
-                  <p className="text-xs">{new URL(bannedUrl.url).host}</p>
+                  <p className="text-xs text-ellipsis overflow-hidden w-auto whitespace-nowrap">
+                    {new URL(bannedUrl.url).host}
+                  </p>
                 </div>
                 <div>
                   <i
@@ -48,18 +51,18 @@ const ListScreen: React.FC = () => {
             </div>
           )}
         </div>
-      </div>
-      <div>
-        <h3 className="text-lg text-center font-semibold">Page bloqué</h3>
+      </Card>
+      <Card title="Page bloqué" defaultOpen={false}>
         <div className="flex flex-col">
           {pageBannedUrls.length ? (
             pageBannedUrls.map((bannedUrl, index) => (
               <div
                 key={index}
+                id={`page-banned-${index}`}
                 className="flex justify-between items-center px-2 border-b py-1 border-gray-200"
               >
                 <div className="max-w-[75%]">
-                  <p className="text-sm text-ellipsis overflow-hidden w-auto whitespace-nowrap">
+                  <p className="text-xs text-ellipsis overflow-hidden w-auto whitespace-nowrap">
                     {`${new URL(bannedUrl.url).host}${
                       new URL(bannedUrl.url).pathname
                     }`}
@@ -79,6 +82,9 @@ const ListScreen: React.FC = () => {
                     <FaBan />
                   </i>
                 </div>
+                <ToolTip target={`page-banned-${index}`}>
+                  Test de julien
+                </ToolTip>
               </div>
             ))
           ) : (
@@ -89,7 +95,7 @@ const ListScreen: React.FC = () => {
             </div>
           )}
         </div>
-      </div>
+      </Card>
     </div>
   )
 }
